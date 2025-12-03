@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electric Bill Calculator</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">ElectricCalc</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <!-- Will be populated by JavaScript based on auth state -->
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Homepage -->
+    <div class="page" id="homepage">
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Calculate Your Electric Bill with Precision</h1>
+                    <p class="hero-subtitle">Get accurate electricity cost estimates based on your consumption. Track your usage, save money, and manage your energy bills effectively.</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="navigateTo('register')">Get Started</button>
+                        <button class="btn btn-secondary" onclick="navigateTo('login')">Sign In</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="hero-image-placeholder">
+                        <span class="hero-icon">💡</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="features-container">
+                <h2 class="features-title">Why Choose ElectricCalc?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Real-time Results</h3>
+                        <p>Get instant calculations based on your consumption data and current electricity rates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure Accounts</h3>
+                        <p>Your data is safely stored and protected with secure authentication.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Bill History</h3>
+                        <p>Track and compare your electricity bills over time to identify trends.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>Mobile Friendly</h3>
+                        <p>Access your calculations anywhere, anytime on any device.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Register Page -->
+    <div class="page" id="register" style="display: none;">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Join ElectricCalc to start tracking your electricity bills</p>
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm Password</label>
+                        <input type="password" id="registerConfirmPassword" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                </form>
+                <p class="auth-footer">Already have an account? <a href="#" onclick="navigateTo('login')">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div class="page" id="login" style="display: none;">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to access your dashboard</p>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                </form>
+                <p class="auth-footer">Don't have an account? <a href="#" onclick="navigateTo('register')">Create one</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div class="page" id="dashboard" style="display: none;">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Dashboard</h1>
+                <p class="welcome-message" id="welcomeMessage">Welcome back!</p>
+            </div>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Calculations</p>
+                        <p class="stat-value" id="totalCalculations">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Last Bill Amount</p>
+                        <p class="stat-value" id="lastBillAmount">$0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Last Consumption</p>
+                        <p class="stat-value" id="lastConsumption">0 kWh</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-actions">
+                <button class="btn btn-primary" onclick="navigateTo('calculator')">New Calculation</button>
+                <button class="btn btn-secondary" onclick="navigateTo('results')">View History</button>
+            </div>
+
+            <div class="recent-results">
+                <h2>Recent Calculations</h2>
+                <div id="recentResultsList">
+                    <p class="empty-state">No calculations yet. Start by creating a new calculation!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div class="page" id="profile" style="display: none;">
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1>Profile</h1>
+                <p>Manage your account settings</p>
+            </div>
+
+            <div class="profile-card">
+                <h2>Account Information</h2>
+                <form id="profileForm" onsubmit="handleProfileUpdate(event)">
+                    <div class="form-group">
+                        <label for="profileName">Full Name</label>
+                        <input type="text" id="profileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="email" id="profileEmail" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+
+            <div class="profile-card">
+                <h2>Change Password</h2>
+                <form id="passwordForm" onsubmit="handlePasswordChange(event)">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPassword">Confirm New Password</label>
+                        <input type="password" id="confirmNewPassword" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+
+            <div class="profile-card danger-zone">
+                <h2>Danger Zone</h2>
+                <p>Delete your account and all associated data</p>
+                <button class="btn btn-danger" onclick="handleDeleteAccount()">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator Page -->
+    <div class="page" id="calculator" style="display: none;">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>Electric Bill Calculator</h1>
+                <p>Enter your consumption details to calculate your bill</p>
+            </div>
+
+            <div class="calculator-card">
+                <form id="calculatorForm" onsubmit="handleCalculation(event)">
+                    <div class="form-group">
+                        <label for="billingPeriod">Billing Period</label>
+                        <input type="text" id="billingPeriod" placeholder="e.g., January 2024" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="previousReading">Previous Reading (kWh)</label>
+                            <input type="number" id="previousReading" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="currentReading">Current Reading (kWh)</label>
+                            <input type="number" id="currentReading" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ratePerKwh">Rate per kWh ($)</label>
+                        <input type="number" id="ratePerKwh" step="0.01" value="0.12" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fixedCharges">Fixed Charges ($)</label>
+                        <input type="number" id="fixedCharges" step="0.01" value="5.00">
+                    </div>
+
+                    <div class="calculation-preview" id="calculationPreview" style="display: none;">
+                        <h3>Calculation Preview</h3>
+                        <div class="preview-item">
+                            <span>Consumption:</span>
+                            <span id="previewConsumption">0 kWh</span>
+                        </div>
+                        <div class="preview-item">
+                            <span>Energy Charges:</span>
+                            <span id="previewEnergyCharges">$0.00</span>
+                        </div>
+                        <div class="preview-item">
+                            <span>Fixed Charges:</span>
+                            <span id="previewFixedCharges">$0.00</span>
+                        </div>
+                        <div class="preview-item total">
+                            <span>Total Bill:</span>
+                            <span id="previewTotal">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Calculate & Save</button>
+                        <button type="button" class="btn btn-secondary" onclick="previewCalculation()">Preview</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div class="page" id="results" style="display: none;">
+        <div class="results-container">
+            <div class="results-header">
+                <h1>Calculation History</h1>
+                <p>View and manage your saved calculations</p>
+            </div>
+
+            <div class="results-filters">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by period..." onkeyup="filterResults()">
+                </div>
+                <div class="filter-controls">
+                    <select id="sortSelect" onchange="filterResults()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="highest">Highest Bill</option>
+                        <option value="lowest">Lowest Bill</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="results-list" id="resultsList">
+                <p class="empty-state">No calculations found. Start by creating a new calculation!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="/scripts/app.js"></script>
+</body>
+</html>
